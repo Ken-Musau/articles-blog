@@ -27,16 +27,6 @@ $ npm start --prefix client
 The proxy avoids CORS issues and allows the server to set a session cookie to
 store the user's login data.
 
----
-
-## Instructions
-
-For our basic login feature, we'll need the following functionality:
-
-- A user can log in by providing their username in a form.
-- A user can log out.
-- A user can remain logged in, even after refreshing the page.
-
 ### Sessions
 
 - `Login` is located at `/login`.

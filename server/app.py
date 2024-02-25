@@ -18,25 +18,34 @@ db.init_app(app)
 
 api = Api(app)
 
+
+class Home(Resource):
+    def get(self):
+        return make_response("<h1>Welcome to articles blog</h2>")
+
+
 class ClearSession(Resource):
 
     def delete(self):
-    
+
         session['page_views'] = None
         session['user_id'] = None
 
         return {}, 204
 
+
 class IndexArticle(Resource):
-    
+
     def get(self):
         articles = [article.to_dict() for article in Article.query.all()]
         return articles, 200
 
+
 class ShowArticle(Resource):
 
     def get(self, id):
-        session['page_views'] = 0 if not session.get('page_views') else session.get('page_views')
+        session['page_views'] = 0 if not session.get(
+            'page_views') else session.get('page_views')
         session['page_views'] += 1
 
         if session['page_views'] <= 3:
@@ -48,6 +57,8 @@ class ShowArticle(Resource):
 
         return {'message': 'Maximum pageview limit reached'}, 401
 
+
+api.add_resource(Home, "/")
 api.add_resource(ClearSession, '/clear')
 api.add_resource(IndexArticle, '/articles')
 api.add_resource(ShowArticle, '/articles/<int:id>')
