@@ -64,14 +64,25 @@ class Login(Resource):
             User.username == request.get_json()['username']).first()
         session["user_id"] = user.id
 
-        return jsonify(user.to_dict()), 200
+        return user.to_dict(), 200
 
 
 class Logout(Resource):
     def delete(self):
         session["user_id"] = None
 
-        return jsonify({'message': '204: No Content'}), 204
+        return {'message': '204: No Content'}, 204
+
+
+class CheckSession(Resource):
+    def get(self):
+        user = User.query.filter(
+            User.id == session.get("user_id")).first()
+
+        if user:
+            return user.to_dict(), 200
+        else:
+            return {}, 401
 
 
 api.add_resource(Home, "/")
@@ -83,6 +94,7 @@ api.add_resource(ShowArticle, '/articles/<int:id>')
 
 api.add_resource(Login, "/login")
 api.add_resource(Logout, "/logout")
+api.add_resource(CheckSession, "/check_session")
 
 
 if __name__ == '__main__':
